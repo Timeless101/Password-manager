@@ -1,9 +1,8 @@
-You already built the generator.
-
 I asked AI to help me make the helper function.
 But I had the right idee to get it, but couldn't finish the function, so asked for help. 
 Now I do understand it.
 
+You already built the generator.
 Now build a real password manager.
 
 Features:
