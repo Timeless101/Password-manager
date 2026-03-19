@@ -4,7 +4,7 @@ import tkinter.font as tkFont
 import tkinter.messagebox
 from password_generator import create_password
 from validator import data_validation_name, password_validation_name
-from storage import insert_data
+from storage import insert_data, data_from_database, create_table
 
 def main():
     app = Application()
@@ -202,10 +202,10 @@ class Application(tk.Tk):
     #Create treeview
     def create_tree(self):
         style = ttk.Style(self)
-        tree = ttk.Treeview(self.frame_bottom)
-        tree.grid(row=0, column=0, rowspan=1, columnspan= 1, sticky="nesw")
-        tree["columns"] = ("1", "2", "3", "4", "5")
-        tree["show"] = "headings"
+        self.tree = ttk.Treeview(self.frame_bottom)
+        self.tree.grid(row=0, column=0, rowspan=1, columnspan= 1, sticky="nesw")
+        self.tree["columns"] = ("1", "2", "3", "4", "5")
+        self.tree["show"] = "headings"
 
         style.theme_use("clam")
         style.configure("Treeview", background="#161B22", fieldbackground="#161B22", foreground="#39FF14")
@@ -215,19 +215,29 @@ class Application(tk.Tk):
                         relief="flat")
         style.map("Treeview.Heading", background=[("active", "#2EA043")])
 
-        tree.column("1", width=1, anchor="sw")
-        tree.column("2", width=90, anchor="center")
-        tree.column("3", width=90, anchor="se")
-        tree.column("4", width=90, anchor="se")
-        tree.column("5", width=90, anchor="se")
+        self.tree.column("1", width=1, anchor="center")
+        self.tree.column("2", width=90, anchor="center")
+        self.tree.column("3", width=90, anchor="center")
+        self.tree.column("4", width=90, anchor="center")
+        self.tree.column("5", width=90, anchor="center")
 
-        tree.heading("1", text="Id")
-        tree.heading("2", text ="Company")
-        tree.heading("3", text ="Firstname")
-        tree.heading("4", text ="Lastname")
-        tree.heading("5", text ="Password")
+        self.tree.heading("1", text="Id")
+        self.tree.heading("2", text ="Company")
+        self.tree.heading("3", text ="Firstname")
+        self.tree.heading("4", text ="Lastname")
+        self.tree.heading("5", text ="Password")
 
-        return tree
+        try:
+            if create_table():
+                ...
+        except:
+            tkinter.messagebox.showerror("Database Error", "An Error accured with in the databse \nplease contact your application administrator. \nError: 0x002")
+
+        for row in data_from_database():
+            self.tree.insert("", "end", iid=None, values=(row[0], row[1], row[2], row[3], row[4]))
+
+        return self.tree
+    
     #Generate password
     def generate_password(self):
         password = create_password()
@@ -246,8 +256,15 @@ class Application(tk.Tk):
             return True
         else:
             return False
-            
-            
+        
+    #Update Treeview
+    def treeview_update(self):        
+        for every_item in self.tree.get_children():
+            self.tree.delete(every_item)
+        for row in data_from_database():
+            self.tree.insert("", "end", iid=None, values=(row[0], row[1], row[2], row[3], row[4]))
+    
+    #Get the entry data from the vields and strip the white space.
     def get_entry_data(self):
         company = self.company_entry.get().strip()
         firstname = self.firstname_entry.get().strip()
@@ -255,6 +272,7 @@ class Application(tk.Tk):
         password = self.password_entry.get().strip()
         return company, firstname, lastname, password
     
+    #Delete the entry data.
     def delete_entry_data(self):
         self.company_entry.delete(0, "end")
         self.firstname_entry.delete(0, "end")
@@ -266,8 +284,11 @@ class Application(tk.Tk):
     def on_click_save_button(self):
         if self.validated_entry_data():
             company, firstname, lastname, password = self.get_entry_data()
-            insert_data(company, firstname, lastname, password)
-            self.delete_entry_data()
+            if insert_data(company, firstname, lastname, password):
+                self.treeview_update()
+                self.delete_entry_data()
+            else:
+                tkinter.messagebox.showerror("Database Error", "An Error accured with in the databse \nplease contact your application administrator. \nError: 0x001")
         else:
             return False
 
