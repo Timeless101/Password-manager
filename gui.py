@@ -6,10 +6,12 @@ from password_generator import create_password
 from validator import data_validation_name, password_validation_name
 from storage import insert_data, data_from_database, create_table, delete_item
 
+#Main function
 def main():
     app = Application()
     app.mainloop()
-
+    
+#Main application.
 class Application(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -19,7 +21,6 @@ class Application(tk.Tk):
         self.minsize(800, 400)
         self.default_font = tkFont.Font(family="Helvetica", size=12, weight="bold")
         
-        #Frame Creation.
         #Top frame
         self.frame_top = tk.Frame(self, bg="#0D1117")
         self.frame_top.pack(side="top", fill="both", expand=False)
@@ -332,4 +333,5 @@ def create_labels(parent, font, text, padx, pady, row, column, gridpadx, gridpad
     return label
 
 if __name__ == "__main__":
+
     main()
