@@ -1,6 +1,7 @@
 import random
 import string
 
+#Password making
 def create_password():
     password = []
 
@@ -20,5 +21,3 @@ def create_password():
         password.append(random.choice("!@#$%&?"))
         
     return "".join(password)
-
-    

@@ -1,9 +1,8 @@
-You already built the generator.
-
 I asked AI to help me make the helper function.
 But I had the right idee to get it, but couldn't finish the function, so asked for help. 
 Now I do understand it.
 
+You already built the generator.
 Now build a real password manager.
 
 Features:
@@ -16,7 +15,7 @@ Delete passwords
 Show all saved passwords
 
 Data stored in:
-CSV or SQLite
+SQLite
 
 GUI:
 Add password
@@ -29,17 +28,6 @@ searching
 GUI tables
 basic database thinking
 
-And it connects perfectly to your current project.
+What needs to be fixed:
 
-
-storage.py
-things that needs to be done.
-
-Fn to start the connection and verifiy that it can connect to it.
-Fn to insert data.
-Fn to retrieve data.
-fn to Encrypt password.
-fn to decrypt password.
-fn for search
-auto id icrement
-fn to delete entrys.
+Database creation in logic.py creates database everytime class Manager is called.
